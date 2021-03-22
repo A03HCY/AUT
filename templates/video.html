@@ -1,0 +1,42 @@
+{% extends "head.html" %}
+{% block body %}
+
+<div class="mdui-container mdui-typo">
+    <h1>标题 heading</h1>
+    <div class="mdui-chip">
+        <img class="mdui-chip-icon" src="avatar1.jpg"/>
+        <span class="mdui-chip-title">Example Chip</span>
+    </div>
+    <div class="mdui-row mdui-m-t-2">
+        <div class="mdui-col-xs-12 mdui-col-sm-8">
+            <video class="mdui-video-fluid" controls="">
+                <source src="/download/a.mp4" type="video/mp4">
+            </video>
+            <div class="mdui-typo mdui-m-y-1"><hr/></div>
+            <div class="mdui-typo mdui-m-y-1">
+                <p>这里是简介</p>
+            </div>
+            <div class="mdui-typo"><hr/></div>
+        </div>
+        <div class="mdui-hidden-xs mdui-col-sm-4">
+            <div class="mdui-card">
+                <div class="mdui-card-primary">
+                    <div class="mdui-card-primary-title">视频<i class="mdui-icon material-icons">add</i></div>
+                    <div class="mdui-typo"><hr/></div>
+                </div>
+                <div class="mdui-card-actions">
+                    <div class="mdui-row">
+                        <div class="mdui-col-xs-6">
+                            <button class="mdui-btn mdui-btn-block mdui-ripple"><i class="mdui-icon material-icons">file_upload</i>上传</button>
+                        </div>
+                        <div class="mdui-col-xs-6">
+                            <button class="mdui-btn mdui-btn-block mdui-ripple"><i class="mdui-icon material-icons">description</i>管理</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

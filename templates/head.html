@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>{{data.html.title}}</title>
+    <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/mdui@1.0.1/dist/css/mdui.min.css"/>
+    <style type="text/css">
+        .botp {
+    width: auto;
+    margin-top: 60px;
+        }
+        .center{ margin:0 auto}
+    </style>
+</head>
+<body class="mdui-appbar-with-toolbar mdui-theme-primary-teal mdui-theme-accent-teal">
+    {% if data.html.ding == True %}
+    <div class="mdui-appbar mdui-appbar-fixed mdui-shadow-0">
+    {% else %}
+    <div class="mdui-appbar mdui-shadow-0">
+    {% endif %}
+        <div class="mdui-toolbar mdui-color-theme">
+            {% if data.html.acdp == True %}
+            <a href="/" class="mdui-typo-headline">Acdp</a>
+            {% endif %}
+            <a href="javascript:;" class="mdui-typo-title">{{data.title}}</a>
+            <div class="mdui-toolbar-spacer"></div>
+            {% if data.html.search == True %}
+            <a class="mdui-btn mdui-btn-icon" href="/search" mdui-tooltip="{content: '搜索'}"><i class="mdui-icon material-icons">search</i></a>
+            {% endif %}
+            {% if data.html.uid == True %}
+            <a class="mdui-btn mdui-btn-icon" href="/space"><i class="mdui-icon material-icons">tag_faces</i></a>
+            {% endif %}
+        </div>
+    </div>
+    {% if data.html.botp == True %}
+    <div class="mdui-container botp">
+    {% else %}
+    <div class="mdui-container">
+    {% endif %}
+        {% block body %}
+        {% endblock %}
+    </div>
+    
+<script src="//cdn.jsdelivr.net/npm/mdui@1.0.1/dist/js/mdui.min.js"></script>
+<script src="//cdn.jsdelivr.net/npm/holderjs@2.9.7/holder.min.js"></script>
+</body>
+</html>    

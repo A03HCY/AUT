@@ -1,0 +1,130 @@
+{% extends "head.html" %}
+{% block body %}
+
+<style>
+    img{
+        display:block;
+        width:100%;
+        height:200px;
+        object-fit:cover
+    }
+</style>
+
+<div class="">
+    <div class="mdui-card">
+        <div class="mdui-card-media">
+            <img height="200" src="https://area.sinaapp.com/bingImg/"/>
+        </div>
+        <div class="mdui-card-header">
+            <img class="mdui-card-header-avatar" src="avatar.jpg"/>
+            <div class="mdui-card-header-subtitle">Subtitle</div>
+        </div>
+        <div class="mdui-tab" mdui-tab>
+            <a href="#home" class="mdui-ripple"><i class="mdui-icon material-icons">home</i>主页</a>
+            <a href="#upload" class="mdui-ripple"><i class="mdui-icon material-icons">folder_open</i>投稿</a>
+            <a href="#setting" class="mdui-ripple"><i class="mdui-icon material-icons">settings</i>设置</a>
+        </div>
+    </div>
+    <br>
+    <div id="home">
+        <div class="mdui-row">
+            <div class="mdui-col-xs-12 mdui-col-sm-8">
+                <div class="mdui-card">
+                    <div class="mdui-card-primary">
+                        <div class="mdui-typo-title">我的视频</div>
+                    </div>
+                    <div class="mdui-card-primary">
+                        <div class="mdui-typo"><hr/></div>
+                        <br>
+                        <div class="mdui-typo-title">我的文档</div>
+                    </div>
+                    <div class="mdui-card-primary">
+                        <div class="mdui-typo"><hr/></div>
+                        <br>
+                        <div class="mdui-typo-title">我的专栏</div>
+                    </div>
+                    <div class="mdui-card-primary">
+                        <div class="mdui-typo"><hr/></div>
+                        <br>
+                        <div class="mdui-typo-title">我的收藏</div>
+                    </div>
+                    <div class="mdui-card-primary">
+                        <div class="mdui-typo"><hr/></div>
+                    </div>
+                </div>
+            </div>
+            <div class="mdui-hidden-xs mdui-col-sm-4">
+                <div class="mdui-card">
+                    <div class="mdui-card-primary">
+                        <div class="mdui-card-primary-title">创作<i class="mdui-icon material-icons">add</i></div>
+                        <div class="mdui-typo"><hr/></div>
+                    </div>
+                    <div class="mdui-card-actions">
+                        <div class="mdui-row">
+                            <div class="mdui-col-xs-6">
+                                <button class="mdui-btn mdui-btn-block mdui-ripple"><i class="mdui-icon material-icons">file_upload</i>上传</button>
+                            </div>
+                            <div class="mdui-col-xs-6">
+                                <button class="mdui-btn mdui-btn-block mdui-ripple"><i class="mdui-icon material-icons">description</i>管理</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br>
+                <div class="mdui-card">
+                    <div class="mdui-card-primary">
+                        <div class="mdui-card-primary-title">公告<i class="mdui-icon material-icons">bookmark</i></div>
+                        <div class="mdui-typo"><hr/></div>
+                        <div class="mdui-textfield">
+                            <textarea class="mdui-textfield-input" rows="4" placeholder="什么都没有呢" maxlength="140"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="upload">
+        <div class="mdui-card">
+            dfh
+        </div>
+    </div>
+    <div id="setting">
+        <div class="mdui-card">
+            <div class="mdui-card-primary">
+                <div class="mdui-typo-title">我的视频</div>
+            </div>
+            <div class="mdui-card-primary">
+                <div class="mdui-typo"><hr/></div>
+                <br>
+                <div class="mdui-typo-title">我的文档</div>
+            </div>
+            <div class="mdui-card-primary">
+                <div class="mdui-typo"><hr/></div>
+                <br>
+                <div class="mdui-typo-title">我的专栏</div>
+                <div>
+                    <div class="mdui-typo-title mdui-m-b-1 mdui-m-t-2">Title  Python标准库使用手册</div>
+                    <div class="mdui-clearfix">
+                      <div class="mdui-float-left">
+                        <img class="mdui-img-rounded" data-src="holder.js/100x150"/>
+                      </div>
+                      <div class="mdui-float-left mdui-m-l-1">
+                        <div class="mdui-typo-body-2">A03HCY</div>
+                        <div class="mdui-typo-body-2">这是用来看的书</div>
+                      </div>
+                    </div>
+                  </div>
+            </div>
+            <div class="mdui-card-primary">
+                <div class="mdui-typo"><hr/></div>
+                <br>
+                <div class="mdui-typo-title">我的收藏</div>
+            </div>
+            <div class="mdui-card-primary">
+                <div class="mdui-typo"><hr/></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
