@@ -3,6 +3,8 @@
 from   flask          import  *
 import socket    as     line
 import os
+import configparser
+import json
 import mimetypes
 import time
 
@@ -52,7 +54,31 @@ fileid = {
     'code':['.java','.py','.pyw','.c','.h','.cpp','.php','.htm','.html','.css']
 }
 
+class User:
+    def __init__(self, base=None):
+        if base:self.base = base
+        else:self.base = os.path.dirname(__file__)
+        self.config = configparser.ConfigParser()
+        self.config.read('uid.cot')
+    
+    def getuid(self, uname, mode='uid'):
+        allnum = self.config[mode]
+        uid = None
+        for op in allnum:
+            name = self.config.get(mode, op)
+            if name == uname:uid = op
+        if not uid:return False
+        return uid
+    
+    def getinfo(self, uid):
+        path = os.path.join(self.base, 'data', uid)
+        if not os.path.exists(path):return False
+
+UID = User()
+a = UID.getuid("Admin")
+
 def GetHead(session, htmlname='', title='', mode='no'):
+    print(session)
     head = {
         'html':{
             'title':htmlname,
@@ -63,7 +89,7 @@ def GetHead(session, htmlname='', title='', mode='no'):
             'uid':True
         },
         'title':title,
-        'uid':session.get('uid'),
+        'uid':session['uid'],
     }
     if mode == 'search':
         head['search'] = {
@@ -89,6 +115,11 @@ def sign():
         if request.form.get('submit') == 'signin':
             uname = request.form.get('name', None)
             upwd = request.form.get('pwd', None)
+
+            ########
+            session['uid'] = 'A'
+            print(session)
+            return redirect('/')
             # 验证
         if request.form.get('submit') == 'signup':
             uname = request.form.get('name', None)
@@ -138,24 +169,23 @@ def downlaodfast(name):
                 yield chunk
     return Response(send_chunk(), content_type='application/octet-stream')
 
-# Download in fast
-@app.route('/adl/<name>', methods=['GET','POST'])
-def adl(name):
-    pathname = "I://"+name
-    store_path = pathname
-    with open(store_path, 'rb') as target_file:
-        return target_file.read()
-
 # Download
 @app.route('/download/<name>', methods=['GET','POST'])
 def download(name):
-    pathname = "I://"+name
+    pathname = "E://"+name
     f = open(pathname, "rb")
     response = Response(f.readlines())
     # response = make_response(f.read())
     mime_type = mimetypes.guess_type(name)[0]
     response.headers['Content-Type'] = mime_type
     response.headers['Content-Disposition'] = 'attachment; filename={}'.format(name.encode().decode('latin-1'))
+    return response
+
+# Download
+@app.route('/downloadb/<name>', methods=['GET','POST'])
+def downloadb(name):
+    response = make_response(send_from_directory('E:\\', name, as_attachment=True))
+    response.headers['Content-Disposition'] = 'attachment; filename={}'.format(name)
     return response
 
 @app.errorhandler(404)
