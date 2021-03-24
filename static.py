@@ -99,7 +99,6 @@ class User:
 UID = User()
 
 def GetHead(session, htmlname='', title='', mode='no'):
-    print(session)
     head = {
         'html':{
             'title':htmlname,
