@@ -59,23 +59,32 @@ class User:
         if base:self.base = base
         else:self.base = os.path.dirname(__file__)
         self.config = configparser.ConfigParser()
-        self.config.read('uid.cot')
+        self.config.read(os.path.join(self.base, "data", "Acdp.cot"), encoding="utf-8")
     
-    def getuid(self, uname, mode='uid'):
-        allnum = self.config[mode]
-        uid = None
-        for op in allnum:
-            name = self.config.get(mode, op)
-            if name == uname:uid = op
-        if not uid:return False
-        return uid
+    def getuid(self, uname):
+        for section in self.config.sections():
+            allnum = self.config[section]
+            for uid in allnum:
+                name = self.config.get(section, uid)
+                if name == uname:
+                    return uid
+        return False
     
     def getinfo(self, uid):
-        path = os.path.join(self.base, 'data', uid)
+        path = os.path.join(self.base, "data", str(uid), "acc.cot")
         if not os.path.exists(path):return False
+        tmpu = configparser.ConfigParser()
+        tmpu.read(path, encoding="utf-8")
+        data = {}
+        for section in tmpu.sections():
+            udat = {}
+            allnum = tmpu[section]
+            for op in allnum:
+                udat[op] = tmpu.get(section, op)
+            data[section] = udat
+        return data
 
 UID = User()
-a = UID.getuid("Admin")
 
 def GetHead(session, htmlname='', title='', mode='no'):
     print(session)
@@ -117,9 +126,8 @@ def sign():
             upwd = request.form.get('pwd', None)
 
             ########
-            session['uid'] = 'A'
-            print(session)
-            return redirect('/')
+            uid = UID.getuid(uname)
+
             # 验证
         if request.form.get('submit') == 'signup':
             uname = request.form.get('name', None)
@@ -193,5 +201,4 @@ def page_not_found(e):
     return render_template('404.html'),404
 
 if __name__ == '__main__':
-    print(HostIP())
     app.run(host="0.0.0.0", port=80)
