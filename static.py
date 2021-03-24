@@ -83,8 +83,17 @@ class User:
                 udat[op] = tmpu.get(section, op)
             data[section] = udat
         return data
+
+    def adduid(self, dic):
+        pass
     
-    def addinfo(self, dic):
+    def addinfo(self, uid, dic):
+        pass
+
+    def chauid(self, dic):
+        pass
+
+    def chainfo(self, uid, dic):
         pass
 
 UID = User()
