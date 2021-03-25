@@ -13,19 +13,6 @@
             alert("请完整填写表单");
             return false;
         }
-        var x = document.forms["sign"]["submit"].value;
-        if (x == "signup") {
-            var x = document.forms["sign"]["phone"].value;
-            if (x == null || x == "") {
-                alert("请完整填写表单");
-                return false;
-            }
-            var x = document.forms["sign"]["email"].value;
-            if (x == null || x == "") {
-                alert("请完整填写表单");
-                return false;
-            }
-        }
     }
 </script>
 
@@ -53,20 +40,23 @@
                     </div>
 
                     <div class="mdui-dialog" id="signup">
-                        <div class="mdui-card-primary">
-                            <div class="mdui-card-primary-title">补全你的信息</div>
-                            <div class="mdui-card-primary-subtitle"></div>
-                        </div>
-                        <div class="mdui-card-actions">
-                            <div class="mdui-textfield">
-                                <label class="mdui-textfield-label">User Name</label>
-                                <input class="mdui-textfield-input" name="phone" type="text">
+                        <div class="mdui-container">
+                            <div class="mdui-card-primary">
+                                <div class="mdui-card-primary-title">补全你的信息</div>
+                                <div class="mdui-card-primary-subtitle"></div>
                             </div>
-                            <div class="mdui-textfield">
-                                <label class="mdui-textfield-label">Password</label>
-                                <input class="mdui-textfield-input" name="email" type="email">
-                            </div>mdui-dialog-close
-                            <button name="submit" value="signup" class="mdui-btn mdui-ripple">确认</button>
+                            <div class="mdui-card-actions">
+                                <div class="mdui-textfield">
+                                    <label class="mdui-textfield-label">你的电话</label>
+                                    <input class="mdui-textfield-input" name="phone" type="text">
+                                </div>
+                                <div class="mdui-textfield">
+                                    <label class="mdui-textfield-label">你的邮箱</label>
+                                    <input class="mdui-textfield-input" name="email" type="email">
+                                </div>
+                                <button name="submit" value="signup" class="mdui-btn mdui-ripple">确认</button>
+                                <div class="botp"></div>
+                            </div>
                         </div>
                     </div>
 
