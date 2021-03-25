@@ -95,13 +95,19 @@ class User:
                     
         return data
     
+    def headpath(self, uid):
+        path = os.path.join(self.base, "data", str(uid), "head.png")
+        if os.path.exists(path):return path
+        path = os.path.join(self.base, "data", str(uid), "head.jpg")
+        if os.path.exists(path):return path
+        return False
+    
     def addinfo(self, dic):
         pass
 
 UID = User()
 
 def GetHead(session, htmlname='', title='', mode='no'):
-    print(session)
     head = {
         'html':{
             'title':htmlname,
@@ -147,9 +153,6 @@ def sign():
             data = UID.getinfo(uid)
             if not data:return redirect('/sign')
 
-            print(data)
-            print(upwd)
-
             if upwd == data['ubas']['pwd']:
                 session['uid'] = uid
                 if rem:session.permanent = True
@@ -161,6 +164,23 @@ def sign():
             # 验证
     head = GetHead(session, '登录 Acdp', '登录')
     return render_template('sign.html', data=head)
+
+@app.route('/head')
+@app.route('/head/<uid>')
+def apihead(uid=None):
+    if not uid:
+        uid = session.get('uid', None)
+        if not uid:return ''
+    path = UID.headpath(uid)
+    print(path)
+    if not path:return ''
+    pathname = path
+    f = open(pathname, "rb")
+    response = Response(f.readlines())
+    mime_type = mimetypes.guess_type(os.path.split(path)[1])[0]
+    response.headers['Content-Type'] = mime_type
+    response.headers['Content-Disposition'] = 'attachment; filename={}'.format(os.path.split(path)[1].encode().decode('latin-1'))
+    return response
 
 @app.route('/signout')
 def out():
