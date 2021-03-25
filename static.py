@@ -1,7 +1,8 @@
 #-*- coding:utf-8 -*-
 
-from   flask          import  *
-import socket    as     line
+from   flask        import *
+from   datetime     import *
+import socket   as  line
 import os
 import configparser
 import json
@@ -43,6 +44,7 @@ basedir = os.path.dirname(__file__)
 app = Flask(__name__)
 app.secret_key = 'C-i6tyW8~gm^ckBS'
 app.config.update(DEBUG=True)
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)
 
 fileid = {
     'video':['.mp4','webm','.avi','.mov','.flv','.m4v'],
@@ -88,7 +90,7 @@ class User:
             allnum = self.config[section]
             for op in allnum:
                 if op == uid:
-                    udat[op] = self.config.get(section, op)
+                    udat['head'] = self.config.get(section, op)
             data[section] = udat
                     
         return data
@@ -119,7 +121,7 @@ def GetHead(session, htmlname='', title='', mode='no'):
         }
     if mode == 'space':
         info = UID.getinfo(session.get('uid'))
-        head['una'] = info['una'][session.get('uid')]
+        head['una'] = info['una']['head']
         head['html']['acdp'] = False
         head['html']['botp'] = False
     return head
@@ -139,13 +141,14 @@ def sign():
         if request.form.get('submit') == 'signin':
             uname = request.form.get('name', None)
             upwd = request.form.get('pwd', None)
+            rem = request.form.get('rem', None)
 
             uid = UID.getuid(uname)
             data = UID.getinfo(uid)
             if upwd == data['ubas']['pwd']:
                 session['uid'] = uid
+                if rem:session.permanent = True
 
-            # 验证
         if request.form.get('submit') == 'signup':
             uname = request.form.get('name', None)
             upwd = request.form.get('pwd', None)
