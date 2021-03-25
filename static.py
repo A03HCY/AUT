@@ -82,18 +82,18 @@ class User:
             for op in allnum:
                 udat[op] = tmpu.get(section, op)
             data[section] = udat
+
+        for section in  self.config.sections():
+            udat = {}
+            allnum = self.config[section]
+            for op in allnum:
+                if op == uid:
+                    udat[op] = self.config.get(section, op)
+            data[section] = udat
+                    
         return data
-
-    def adduid(self, dic):
-        pass
     
-    def addinfo(self, uid, dic):
-        pass
-
-    def chauid(self, dic):
-        pass
-
-    def chainfo(self, uid, dic):
+    def addinfo(self, dic):
         pass
 
 UID = User()
@@ -110,7 +110,7 @@ def GetHead(session, htmlname='', title='', mode='no'):
             'uid':True
         },
         'title':title,
-        'uid':session['uid'],
+        'uid':session.get('uid'),
     }
     if mode == 'search':
         head['search'] = {
@@ -118,6 +118,8 @@ def GetHead(session, htmlname='', title='', mode='no'):
             'results':[]
         }
     if mode == 'space':
+        info = UID.getinfo(session.get('uid'))
+        head['una'] = info['una'][session.get('uid')]
         head['html']['acdp'] = False
         head['html']['botp'] = False
     return head
@@ -131,14 +133,17 @@ def home():
 # Sign up or in
 @app.route('/sign', methods=['GET','POST'])
 def sign():
-    # 已登录则 return redirect('/')
+    if session.get('uid', None):
+        return redirect('/')
     if request.method == 'POST':
         if request.form.get('submit') == 'signin':
             uname = request.form.get('name', None)
             upwd = request.form.get('pwd', None)
 
-            ########
             uid = UID.getuid(uname)
+            data = UID.getinfo(uid)
+            if upwd == data['ubas']['pwd']:
+                session['uid'] = uid
 
             # 验证
         if request.form.get('submit') == 'signup':
@@ -147,6 +152,13 @@ def sign():
             # 验证
     head = GetHead(session, '登录 Acdp', '登录')
     return render_template('sign.html', data=head)
+
+@app.route('/signout')
+def out():
+    if not session.get('uid'):
+        return redirect('/')
+    del session['uid']
+    return redirect('/')
 
 # Search
 @app.route('/search', methods=['GET','POST'])
@@ -160,6 +172,10 @@ def search():
 @app.route('/space', methods=['GET','POST'])
 @app.route('/space/<uid>', methods=['GET','POST'])
 def user(uid=None):
+    if not session.get('uid', None):
+        return redirect('/sign')
+    info = UID.getinfo(session.get('uid'))
+    print(info)
     head = GetHead(session, 'Acdp', '你好', 'space')
     return render_template('space.html', data=head)
 
