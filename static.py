@@ -145,9 +145,15 @@ def sign():
 
             uid = UID.getuid(uname)
             data = UID.getinfo(uid)
+            if not data:return redirect('/sign')
+
+            print(data)
+            print(upwd)
+
             if upwd == data['ubas']['pwd']:
                 session['uid'] = uid
                 if rem:session.permanent = True
+            return redirect('/')
 
         if request.form.get('submit') == 'signup':
             uname = request.form.get('name', None)
