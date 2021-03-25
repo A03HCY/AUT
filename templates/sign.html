@@ -13,6 +13,19 @@
             alert("请完整填写表单");
             return false;
         }
+        var x = document.forms["sign"]["submit"].value;
+        if (x == "signup") {
+            var x = document.forms["sign"]["phone"].value;
+            if (x == null || x == "") {
+                alert("请完整填写表单");
+                return false;
+            }
+            var x = document.forms["sign"]["email"].value;
+            if (x == null || x == "") {
+                alert("请完整填写表单");
+                return false;
+            }
+        }
     }
 </script>
 
@@ -28,48 +41,34 @@
                 <form name='sign' action="" onsubmit="return validateForm()" method="post">
                     <div class="mdui-card-actions">
                         <div class="mdui-textfield">
-                            <label class="mdui-textfield-label">User Name</label>
+                            <label class="mdui-textfield-label">名称 电话 邮箱</label>
                             <input class="mdui-textfield-input" name="name" type="text">
                         </div>
                         <div class="mdui-textfield">
-                            <label class="mdui-textfield-label">Password</label>
+                            <label class="mdui-textfield-label">密码</label>
                             <input class="mdui-textfield-input" name="pwd" type="password">
                         </div>
                         <button name="submit" value="signin" class="mdui-btn mdui-ripple">确认</button>
-                        <button name="submit" value="signup" class="mdui-btn mdui-ripple" mdui-dialog="{target: '#signup'}">注册</button>
+                        <a class="mdui-btn mdui-ripple" mdui-dialog="{target: '#signup'}">注册</a>
                     </div>
 
                     <div class="mdui-dialog" id="signup">
-                        <div class="mdui-tab mdui-tab-full-width" id="example4-tab">
-                          <a href="#example4-tab1" class="mdui-ripple">web</a>
-                          <a href="#example4-tab2" class="mdui-ripple">shopping</a>
-                          <a href="#example4-tab3" class="mdui-ripple">videos</a>
+                        <div class="mdui-card-primary">
+                            <div class="mdui-card-primary-title">补全你的信息</div>
+                            <div class="mdui-card-primary-subtitle"></div>
                         </div>
-                        <div id="example4-tab1" class="mdui-p-a-2">
-                          <p>tab 1</p>
-                          <p>tab 1</p>
-                          <p>tab 1</p>
-                          <p>tab 1</p>
-                          <p>tab 1</p>
-                          <p>tab 1</p>
+                        <div class="mdui-card-actions">
+                            <div class="mdui-textfield">
+                                <label class="mdui-textfield-label">User Name</label>
+                                <input class="mdui-textfield-input" name="phone" type="text">
+                            </div>
+                            <div class="mdui-textfield">
+                                <label class="mdui-textfield-label">Password</label>
+                                <input class="mdui-textfield-input" name="email" type="email">
+                            </div>mdui-dialog-close
+                            <button name="submit" value="signup" class="mdui-btn mdui-ripple">确认</button>
                         </div>
-                        <div id="example4-tab2" class="mdui-p-a-2">
-                          <p>tab 2</p>
-                          <p>tab 2</p>
-                          <p>tab 2</p>
-                          <p>tab 2</p>
-                          <p>tab 2</p>
-                          <p>tab 2</p>
-                        </div>
-                        <div id="example4-tab3" class="mdui-p-a-2">
-                          <p>tab 3</p>
-                          <p>tab 3</p>
-                          <p>tab 3</p>
-                          <p>tab 3</p>
-                          <p>tab 3</p>
-                          <p>tab 3</p>
-                        </div>
-                      </div>
+                    </div>
 
                 </form>
             </div>
