@@ -1,7 +1,8 @@
 #-*- coding:utf-8 -*-
 
-from   flask        import *
-from   datetime     import *
+from   flask         import *
+from   flask_uploads import *
+from   datetime      import *
 import socket   as  line
 import os
 import configparser
@@ -204,7 +205,7 @@ def user(uid=None):
     if not session.get('uid', None):
         return redirect('/sign')
     info = UID.getinfo(session.get('uid'))
-    print(info)
+    
     head = GetHead(session, 'Acdp', '你好', 'space')
     return render_template('space.html', data=head)
 
@@ -234,6 +235,28 @@ def downlaodfast(name):
                 yield chunk
     return Response(send_chunk(), content_type='application/octet-stream')
 
+def data():
+    forpath = os.path.join(basedir,'data',session.get('uid'))
+    filef = request.args.get('filepwd')
+    basedir = os.path.dirname(__file__)
+    filet = None
+    for f in os.listdir(forpath):
+        pwd = os.path.splitext(f)[0].split('-')[-1]
+        if not pwd == filef:continue
+        filet = os.path.join(forpath, f)
+        break
+    if not filet:return ''
+    filef = filet
+    try:
+        filename = filef.split('\\')[-1]
+        path, name = os.path.split(os.path.join(basedir, filef))
+        response = make_response(send_from_directory(path, name, as_attachment=True))
+        response.headers["Content-Disposition"] = "attachment; filename={}".format(filename.encode().decode('utf-8'))
+        return response
+    except Exception as err:
+        return 'download_file error: {}'.format(str(err))
+    return data
+
 # Download
 @app.route('/download/<name>', methods=['GET','POST'])
 def download(name):
@@ -244,13 +267,6 @@ def download(name):
     mime_type = mimetypes.guess_type(name)[0]
     response.headers['Content-Type'] = mime_type
     response.headers['Content-Disposition'] = 'attachment; filename={}'.format(name.encode().decode('latin-1'))
-    return response
-
-# Download
-@app.route('/downloadb/<name>', methods=['GET','POST'])
-def downloadb(name):
-    response = make_response(send_from_directory('E:\\', name, as_attachment=True))
-    response.headers['Content-Disposition'] = 'attachment; filename={}'.format(name)
     return response
 
 @app.errorhandler(404)
