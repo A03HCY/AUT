@@ -9,6 +9,7 @@ import configparser
 import json
 import mimetypes
 import time
+import shutil
 
 __version__ = '0.0.1'
 
@@ -39,6 +40,8 @@ def HostIP():
     finally:
         s.close()
     return ip
+
+print(HostIP())
 
 # Debug
 basedir = os.path.dirname(__file__)
@@ -210,6 +213,7 @@ def user(uid=None):
     if not session.get('uid', None):
         return redirect('/sign')
     info = UID.getinfo(session.get('uid'))
+    if not info:return redirect('/signout')
     
     head = GetHead(session, 'Acdp', '你好', 'space')
     return render_template('space.html', data=head)
@@ -231,6 +235,9 @@ def upload():
     if request.method == 'POST' and 'media' in request.files:
         filename = files.save(request.files['media'])
         url = files.url(filename)
+        title = request.form.get('title', None)
+        jianjie = request.form.get('jianjie', None)
+        print(request.form, filename, url)
     
     head = GetHead(session, 'Acdp', '', 'space')
     return render_template('upload.html', data=head)
