@@ -5,12 +5,18 @@
     function validateForm() {
         var x = document.forms["sign"]["name"].value;
         if (x == null || x == "") {
-            alert("请完整填写表单");
+            mdui.snackbar({
+            message: '请填写信息',
+            position: 'right-bottom'
+            });
             return false;
         }
         var x = document.forms["sign"]["pwd"].value;
         if (x == null || x == "") {
-            alert("请完整填写表单");
+            mdui.snackbar({
+            message: '请填写信息',
+            position: 'right-bottom'
+            });
             return false;
         }
     }
