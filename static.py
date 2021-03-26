@@ -65,6 +65,10 @@ fileid = {
     'code':['.java','.py','.pyw','.c','.h','.cpp','.php','.htm','.html','.css']
 }
 
+def Ranstr(num):
+    ran_str = ''.join(random.sample('abcdefghijklmnopqrstuvwxyz0123456789', num))
+    return ran_str
+
 class User:
     def __init__(self, base=None):
         if base:self.base = base
@@ -114,7 +118,31 @@ class User:
     def addinfo(self, dic):
         pass
 
+class DB:
+    def __init__(self, base=None):
+        if base:self.base = base
+        else:self.base = os.path.dirname(__file__)
+        self.config = configparser.ConfigParser()
+        self.config.read(os.path.join(self.base, "data", "Fs.cot"), encoding="utf-8")
+    
+    def search(self, key, ex='all'):
+        pass
+
+    def add(self, v, ex, title, uid):
+        dat = {
+            'title':title,
+            'uid':uid
+        }
+        self.config.set(ex, v, str(dat))
+        self.config.write(open(os.path.join(self.base, "data", "Fs.cot"), "r+", encoding="utf-8"))
+    
+    def update(self, v, ex,):
+        pass
+
+CotB = DB()
 UID = User()
+
+CotB.add('BVas423g', 'vd', '震惊！一班主任这样做...', '30001')
 
 def GetHead(session, htmlname='', title='', mode='no'):
     head = {
@@ -237,6 +265,9 @@ def upload():
         url = files.url(filename)
         title = request.form.get('title', None)
         jianjie = request.form.get('jianjie', None)
+        filepath = os.path.join(basedir,'uploads', 'files', filename)
+
+        shutil.move()
         print(request.form, filename, url)
     
     head = GetHead(session, 'Acdp', '', 'space')
