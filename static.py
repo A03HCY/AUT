@@ -46,6 +46,7 @@ app = Flask(__name__)
 app.secret_key = 'C-i6tyW8~gm^ckBS'
 app.config.update(DEBUG=True)
 app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)
+app.config['UPLOADS_DEFAULT_DEST']       = 'uploads'
 
 fileid = {
     'video':['.mp4','webm','.avi','.mov','.flv','.m4v'],
@@ -221,6 +222,13 @@ def video(number=None):
     head = GetHead(session, '预览 Acdp', '预览')
     return render_template('video.html', data=head)
 
+@app.route('/upload', methods=['GET', 'POST'])
+def upload():
+    if request.method == 'POST' and 'media' in request.files:
+        filename = files.save(request.files['media'])
+        url = files.url(filename)
+    return render_template('upload.html')
+
 # Download in fast
 @app.route('/downloadfast/<name>', methods=['GET','POST'])
 def downlaodfast(name):
@@ -234,6 +242,8 @@ def downlaodfast(name):
                     break
                 yield chunk
     return Response(send_chunk(), content_type='application/octet-stream')
+
+
 
 def data():
     forpath = os.path.join(basedir,'data',session.get('uid'))
