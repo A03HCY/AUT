@@ -7,7 +7,7 @@ import socket   as  line
 import os
 import random
 import configparser
-import json
+import ast
 import mimetypes
 import time
 import shutil
@@ -119,6 +119,8 @@ class User:
     def addinfo(self, dic):
         pass
 
+UID = User()
+
 class DB:
     def __init__(self, base=None):
         if base:self.base = base
@@ -127,12 +129,29 @@ class DB:
         self.config.read(os.path.join(self.base, "data", "Fs.cot"), encoding="utf-8")
     
     def search(self, key, ex='all'):
-        pass
+        vdn = []
+        for section in self.config.sections():
+            allnum = self.config[section]
+            for v in allnum:
+                dat = self.config.get(section, v)
+                dat = ast.literal_eval(dat)
+                if key in dat['title']:
+                    vdn.append({'v':v,'title':dat['title'], 'ano':UID.getinfo(dat['uid'])['una']['head'], 'ex':section})
+        return vdn
 
     def checkex(self, v, ex):
         allnum = self.config[ex]
         if v in allnum:
             return True
+        return False
+    
+    def get(self, v, ex):
+        allnum = self.config[ex]
+        for bv in allnum:
+            if v == bv:
+                dat = self.config.get(ex, v)
+                dat = ast.literal_eval(dat)
+                return dat
         return False
 
     def add(self, v, ex, title, uid):
@@ -147,7 +166,6 @@ class DB:
         pass
 
 CotB = DB()
-UID = User()
 
 def GetHead(session, htmlname='', title='', mode='no'):
     head = {
@@ -165,7 +183,6 @@ def GetHead(session, htmlname='', title='', mode='no'):
     if mode == 'search':
         head['search'] = {
             'word':'',
-            'results':[]
         }
     if mode == 'space':
         info = UID.getinfo(session.get('uid'))
@@ -214,7 +231,6 @@ def apihead(uid=None):
         uid = session.get('uid', None)
         if not uid:return ''
     path = UID.headpath(uid)
-    print(path)
     if not path:return ''
     pathname = path
     f = open(pathname, "rb")
@@ -236,7 +252,12 @@ def out():
 def search():
     head = GetHead(session, '搜索 Acdp', '搜索', 'search')
     head['html']['search'] = False
-    head['search']['results'].append({'title':'Hi','point':'.doc','ano':'A03HCY','size':'13MB'})
+    if request.method == 'POST':
+        word = request.form.get('word', None)
+        head['search']['word'] = word
+        res = CotB.search(word)
+        head['search']['res'] = res
+    print(head)
     return render_template('search.html', data=head)
 
 # User's information
@@ -261,6 +282,14 @@ def article(number=None):
 @app.route('/video/<number>', methods=['GET','POST'])
 def video(number=None):
     head = GetHead(session, '预览 Acdp', '预览')
+    res = CotB.get(number, 'vd')
+    if res == False:return render_template('404.html'),404
+    info = UID.getinfo(res['uid'])
+    head['v'] = number
+    head['tit'] = res['title']
+    head['anuid'] = res['uid']
+    head['una'] = info['una']['head']
+    print(head)
     return render_template('video.html', data=head)
 
 # Upload file
@@ -298,23 +327,20 @@ def downlaodfast(name):
                 yield chunk
     return Response(send_chunk(), content_type='application/octet-stream')
 
+@app.route('/data')
 def data():
-    forpath = os.path.join(basedir,'data',session.get('uid'))
-    filef = request.args.get('filepwd')
-    basedir = os.path.dirname(__file__)
-    filet = None
-    for f in os.listdir(forpath):
-        pwd = os.path.splitext(f)[0].split('-')[-1]
-        if not pwd == filef:continue
-        filet = os.path.join(forpath, f)
-        break
-    if not filet:return ''
-    filef = filet
+    num = request.args.get('num')
+    if not num:return ''
+    res = CotB.get(num, 'vd')
+    if not res:return ''
+    uid = res['uid']
+    pathfor = os.path.join(basedir, 'data', uid, 'vd')
+    for filen in os.listdir(pathfor):
+        if num in filen:break
     try:
-        filename = filef.split('\\')[-1]
-        path, name = os.path.split(os.path.join(basedir, filef))
+        path, name = os.path.split(os.path.join(pathfor, filen))
         response = make_response(send_from_directory(path, name, as_attachment=True))
-        response.headers["Content-Disposition"] = "attachment; filename={}".format(filename.encode().decode('utf-8'))
+        response.headers["Content-Disposition"] = "attachment; filename={}".format(name.encode().decode('latin-1'))
         return response
     except Exception as err:
         return 'download_file error: {}'.format(str(err))
