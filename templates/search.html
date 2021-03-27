@@ -21,12 +21,14 @@
     <div class="mdui-col-xs-1  mdui-col-sm-2 mdui-col-md-3"></div>
     <div class="mdui-col-xs-10 mdui-col-sm-8 mdui-col-md-6">
       <div class="mdui-card center">
-        <div class="mdui-toolbar">
-          <div class="mdui-textfield mdui-container">
-            <input class="mdui-textfield-input" name="word" type="text" value="{{data.search.word}}" autofocus>
+        <form action="/search" method="POST" enctype="multipart/form-data">
+          <div class="mdui-toolbar">
+            <div class="mdui-textfield mdui-container">
+              <input class="mdui-textfield-input" name="word" type="text" value="{{data.search.word}}" autofocus>
+            </div>
+            <button name="submit" class="mdui-btn mdui-btn-icon mdui-btn-dense"><i class="mdui-icon material-icons">search</i></button>
           </div>
-          <button name="submit" class="mdui-btn mdui-btn-icon mdui-btn-dense"><i class="mdui-icon material-icons">search</i></button>
-        </div>
+        </form>
       </div>
     </div>
     <div class="mdui-col-xs-1  mdui-col-sm-2 mdui-col-md-3"></div>
@@ -36,6 +38,45 @@
 <div class="mdui-container botp">
   <div class="mdui-container">
     <div class="mdui-container">
+
+      {% if data.search.res %}
+        {% for v in data.search.res%}
+          {% if v.ex == 'vd' %}
+          <div>
+            <div class="mdui-clearfix mdui-m-b-1 mdui-m-t-3">
+              <i class="mdui-float-left mdui-icon material-icons">movie</i>
+              <a href="/video/{{v.v}}"></a><div class="mdui-float-left mdui-typo-title mdui-m-l-1"><i class="mdui-float-left mdui-icon material-icons">movie</i>{{v.title}}</div>
+            </div>
+            <div class="mdui-clearfix">
+              <div class="mdui-float-left">
+                <a href="/video/{{v.v}}"><img class="mdui-img-rounded mv" data-src="holder.js/150x100" src="https://area.sinaapp.com/bingImg/"/></a>
+              </div>
+              <div class="mdui-float-left mdui-m-l-1 mdui-col-xs-5 mdui-col-sm-5 mdui-col-md-5">
+                <div class="mdui-typo-body-2">{{v.ano}}</div>
+                <div class="mdui-typo-body-2 mdui-m-t-1">暂无简介</div>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+          {% if v.ex in ['dc', 'pf', 'pd', 'xl'] %}
+          <div>
+            <div class="mdui-clearfix mdui-m-b-1 mdui-m-t-3">
+              <i class="mdui-float-left mdui-icon material-icons">book</i>
+              <div class="mdui-float-left mdui-typo-title mdui-m-l-1">{{v.title}}</div>
+            </div>
+            <div class="mdui-clearfix">
+              <div class="mdui-float-left">
+                <a href="/article/{{v.ex+v.v}}"><img class="mdui-img-rounded dc" data-src="holder.js/100x150"/></a>
+              </div>
+              <div class="mdui-float-left mdui-m-l-1 mdui-col-xs-6 mdui-col-sm-6 mdui-col-md-6">
+                <div class="mdui-typo-body-2">{{v.ano}}</div>
+                <div class="mdui-typo-body-2 mdui-m-t-1">暂无简介</div>
+              </div>
+            </div>
+          </div>
+          {% endif %}
+        {% endfor %}
+      {% endif %}
 
       <div>
         <div class="mdui-clearfix mdui-m-b-1 mdui-m-t-3">
@@ -62,7 +103,7 @@
           <div class="mdui-float-left">
             <a href="/video/test"><img class="mdui-img-rounded mv" data-src="holder.js/150x100" src="https://area.sinaapp.com/bingImg/"/></a>
           </div>
-          <div class="mdui-float-left mdui-m-l-1 mdui-col-xs-6 mdui-col-sm-6 mdui-col-md-6">
+          <div class="mdui-float-left mdui-m-l-1 mdui-col-xs-5 mdui-col-sm-5 mdui-col-md-5">
             <div class="mdui-typo-body-2">A03HCY</div>
             <div class="mdui-typo-body-2 mdui-m-t-1">这是用来看的视频，讲述了一群少年在一个晚上中来到一所放弃学校的故事...</div>
           </div>
