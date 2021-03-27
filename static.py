@@ -5,6 +5,7 @@ from   flask_uploads import *
 from   datetime      import *
 import socket   as  line
 import os
+import random
 import configparser
 import json
 import mimetypes
@@ -128,6 +129,12 @@ class DB:
     def search(self, key, ex='all'):
         pass
 
+    def checkex(self, v, ex):
+        allnum = self.config[ex]
+        if v in allnum:
+            return True
+        return False
+
     def add(self, v, ex, title, uid):
         dat = {
             'title':title,
@@ -141,8 +148,6 @@ class DB:
 
 CotB = DB()
 UID = User()
-
-CotB.add('BVas423g', 'vd', '震惊！一班主任这样做...', '30001')
 
 def GetHead(session, htmlname='', title='', mode='no'):
     head = {
@@ -258,6 +263,7 @@ def video(number=None):
     head = GetHead(session, '预览 Acdp', '预览')
     return render_template('video.html', data=head)
 
+# Upload file
 @app.route('/upload', methods=['GET', 'POST'])
 def upload():
     if request.method == 'POST' and 'media' in request.files:
@@ -267,8 +273,13 @@ def upload():
         jianjie = request.form.get('jianjie', None)
         filepath = os.path.join(basedir,'uploads', 'files', filename)
 
-        shutil.move()
-        print(request.form, filename, url)
+        out = True
+        while out:
+            v = Ranstr(8)
+            out = CotB.checkex(v, 'vd')
+
+        shutil.move(os.path.join(basedir, 'uploads', 'files', filename), os.path.join(basedir, 'data', session.get('uid'), 'vd', v+os.path.splitext(filename)[1]))
+        CotB.add(v, 'vd', title, session.get('uid'))
     
     head = GetHead(session, 'Acdp', '', 'space')
     return render_template('upload.html', data=head)
